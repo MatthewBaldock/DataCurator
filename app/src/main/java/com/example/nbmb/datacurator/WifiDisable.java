@@ -32,27 +32,25 @@ public class WifiDisable extends AppCompatActivity {
         ToggleButton toggle = findViewById(R.id.toggleButton);
         TextView duration = findViewById(R.id.duration);
         String onOff = "OFF";
-        Log.d("TOGGLE","HERE");
+
         if(toggle.isChecked())
         {
 
             String startTime = (new Date()).toString();
             ddhlp.toggleOn(duration.getText().toString(),startTime);
             onOff = "ON";
+            Intent service = new Intent();
+            service.putExtra("duration",duration.getText().toString());
+            service.putExtra("onoff",onOff);
+
+            WifiDisableService.enqueueWork(this.getApplicationContext(),service);
         }
         else if (!toggle.isChecked())
         {
             onOff = "OFF";
             ddhlp.toggleOff();
         }
-        Intent service = new Intent();
-        service.putExtra("duration",duration.getText().toString());
-        service.putExtra("onoff",onOff);
-        WifiManager wifi =(WifiManager)getSystemService(Context.WIFI_SERVICE);
-        wifi.disconnect();
-        WifiManager.WifiLock lock =  wifi.createWifiLock(WifiManager.WIFI_MODE_SCAN_ONLY,"WIFI_MODE_SCAN_ONLY");
-        lock.acquire();
-       // WifiDisableService.enqueueWork(this,WifiDisableService.class,1000,service);
+
 
     }
     public void quickDisable(View view)

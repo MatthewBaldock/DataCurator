@@ -7,6 +7,8 @@ import android.net.wifi.WifiManager;
 import android.os.SystemClock;
 import android.support.v4.app.JobIntentService;
 import android.util.Log;
+import android.widget.Toast;
+
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -16,29 +18,36 @@ public class WifiDisableService extends JobIntentService {
     {
         super();
     }
-    private static Timer timer = new Timer();
+    public static void enqueueWork(Context context,Intent work)
+    {
+        enqueueWork(context, WifiDisableService.class, 1000, work);
+    }
     @Override
     protected void onHandleWork(Intent intent) {
         int duration = intent.getIntExtra("duration", 0);
         String onOff = intent.getStringExtra("onoff");
-        if (onOff == "ON")
+        Log.d("TOGGLE","HERE");
+        Log.d("EQUALS_TOGGLE","Equals "+onOff.equals("ON"));
+        if (onOff.equals("ON"))
         {
             // We have received work to do.  The system or framework is already
             // holding a wake lock for us at this point, so we can just go.
-            Log.i("SimpleJobIntentService", "Executing work: " + intent);
-            String label = intent.getStringExtra("label");
-            if (label == null) {
-                label = intent.toString();
-            }
-            for (int i = 0; i < 5; i++) {
-                Log.i("SimpleJobIntentService", "Running service " + (i + 1)
-                        + "/5 @ " + SystemClock.elapsedRealtime());
+
+            WifiManager wifi =(WifiManager)getSystemService(Context.WIFI_SERVICE);
+
+            WifiManager.WifiLock lock =  wifi.createWifiLock(WifiManager.WIFI_MODE_SCAN_ONLY,"WIFI_MODE_SCAN_ONLY");
+
+
                 try {
-                    Thread.sleep(1000);
+                    Log.d("TRY_TOGGLE", "Wifi lock ");
+                    wifi.disconnect();
+                    lock.acquire();
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                 }
-            }
-            Log.i("SimpleJobIntentService", "Completed service @ " + SystemClock.elapsedRealtime());
+                finally {
+                    lock.release();
+                }
 
 
         }
