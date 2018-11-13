@@ -41,7 +41,10 @@ public class WifiDisableService extends JobIntentService {
                 try {
                     Log.d("TRY_TOGGLE", "Wifi lock ");
                     wifi.disconnect();
-                    lock.acquire();
+                    if(!lock.isHeld())
+                    {
+                        lock.acquire();
+                    }
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                 }
@@ -51,6 +54,7 @@ public class WifiDisableService extends JobIntentService {
 
 
         }
+
 
 
     }
