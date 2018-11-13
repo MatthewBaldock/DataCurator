@@ -1,6 +1,7 @@
 package com.example.nbmb.datacurator.database;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -38,7 +39,7 @@ public class DisableDataHelper extends SQLiteOpenHelper {
     public void toggleOn(String duration,String startTime){
         SQLiteDatabase db = this.getWritableDatabase();
         String  toggleQuery = "UPDATE "+TABLE_DISABLE+" SET "+COLUMN_DUR+"='"+duration+"', "
-                +COLUMN_START+"="+startTime+","
+                +COLUMN_START+"='"+startTime+"',"
                 + COLUMN_TOGGLE+ "='ON' WHERE "+
                 "disableID=555";
         db.execSQL(toggleQuery);
@@ -56,6 +57,19 @@ public class DisableDataHelper extends SQLiteOpenHelper {
         String  toggleQuery = "UPDATE "+TABLE_DISABLE+" SET "+ COLUMN_TOGGLE+ "='OFF' WHERE "+
                 "disableID=555";
         db.execSQL(toggleQuery);
+    }
+
+    public int getDuration()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String getQuery = "SELECT "+COLUMN_DUR+" FROM "+TABLE_DISABLE+" WHERE "+COLUMN_ID+"='555'";
+        Cursor cursor = db.rawQuery(getQuery,null);
+        int duration = 0;
+        while(cursor.moveToNext())
+        {
+            duration = cursor.getInt(0);
+        }
+        return duration;
     }
 
 
