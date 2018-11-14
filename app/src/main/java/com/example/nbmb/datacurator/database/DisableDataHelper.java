@@ -71,6 +71,17 @@ public class DisableDataHelper extends SQLiteOpenHelper {
         }
         return duration;
     }
-
+    public String getStatus()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String getQuery = "SELECT "+COLUMN_TOGGLE+" FROM "+TABLE_DISABLE+" WHERE "+COLUMN_ID+"='555'";
+        Cursor cursor = db.rawQuery(getQuery,null);
+        String onoff = "OFF";
+        while(cursor.moveToNext())
+        {
+            onoff = cursor.getString(0);
+        }
+        return onoff;
+    }
 
 }

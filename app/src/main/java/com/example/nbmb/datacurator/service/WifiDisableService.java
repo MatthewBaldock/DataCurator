@@ -1,63 +1,53 @@
 package com.example.nbmb.datacurator.service;
 
-
 import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
-import android.os.SystemClock;
-import android.support.v4.app.JobIntentService;
 import android.util.Log;
-import android.widget.Toast;
-
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-public class WifiDisableService extends JobIntentService {
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+public class WifiDisableService {
+    ScheduledThreadPoolExecutor executor;
+    DisableTask disableTask;
     public WifiDisableService()
     {
-        super();
+        executor = new ScheduledThreadPoolExecutor(1);
     }
-    public static void enqueueWork(Context context,Intent work)
-    {
-        enqueueWork(context, WifiDisableService.class, 1000, work);
-    }
-    @Override
-    protected void onHandleWork(Intent intent) {
-        int duration = intent.getIntExtra("duration", 0);
+    public void onHandleWork(Context context, Intent intent) {
+
+        disableTask = new DisableTask(context);
+        int duration = intent.getIntExtra("duration",0);
+        Log.d("DURATION","Duration: "+duration);
         String onOff = intent.getStringExtra("onoff");
-        Log.d("TOGGLE","HERE");
-        Log.d("EQUALS_TOGGLE","Equals "+onOff.equals("ON"));
+        String period = intent.getStringExtra("period");
+        Log.d("DURATION","VALUE: "+onOff);
+        executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
         if (onOff.equals("ON"))
         {
-            // We have received work to do.  The system or framework is already
-            // holding a wake lock for us at this point, so we can just go.
-
-            WifiManager wifi =(WifiManager)getSystemService(Context.WIFI_SERVICE);
-
-            WifiManager.WifiLock lock =  wifi.createWifiLock(WifiManager.WIFI_MODE_SCAN_ONLY,"WIFI_MODE_SCAN_ONLY");
-
-
-                try {
-                    Log.d("TRY_TOGGLE", "Wifi lock ");
-                    wifi.disconnect();
-                    if(!lock.isHeld())
-                    {
-                        lock.acquire();
-                    }
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                }
-                finally {
-                    lock.release();
-                }
-
+            switch(period)
+            {
+                case "Seconds":
+                    executor.schedule(disableTask,duration,TimeUnit.SECONDS);
+                    break;
+                case "Minutes":
+                    executor.schedule(disableTask,duration,TimeUnit.MINUTES);
+                    break;
+                case "Hours":
+                    executor.schedule(disableTask,duration,TimeUnit.HOURS);
+                    break;
+                case "Days":
+                    executor.schedule(disableTask,duration,TimeUnit.DAYS);
+                    break;
+                default:
+                    executor.execute(disableTask);
+                    break;
+            }
 
         }
-
-
+        else if (onOff.equals("OFF"))
+        {
+            disableTask.run();
+        }
 
     }
-
 
 }
