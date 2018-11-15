@@ -7,7 +7,7 @@
     tools:context=".DataAlertActivity">
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/numTimeEditText"
         android:layout_width="114dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -16,24 +16,22 @@
         android:hint="# of "
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/numBytesEditText" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/enableAlertSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="Switch"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="On/Off"
         android:textOff="Disabled"
         android:textOn="Enabled"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/spinner2"
+        app:layout_constraintStart_toEndOf="@+id/timeUnitSpinner"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/numBytesEditText"
         android:layout_width="114dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -45,33 +43,44 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/dataSizeSpinner"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="18dp"
         android:entries="@array/datarate_units_array"
-        app:layout_constraintStart_toEndOf="@+id/editText"
+        app:layout_constraintStart_toEndOf="@+id/numBytesEditText"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/spinner2"
+        android:id="@+id/timeUnitSpinner"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:entries="@array/time_units_array"
-        app:layout_constraintStart_toEndOf="@+id/editText3"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintStart_toEndOf="@+id/numTimeEditText"
+        app:layout_constraintTop_toBottomOf="@+id/dataSizeSpinner" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="37dp"
         android:layout_height="31dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="18dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="44dp"
         android:text="per"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dataSizeSpinner"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/initalizeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginBottom="32dp"
+        android:onClick="initializeClicked"
+        android:text="Initialize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
