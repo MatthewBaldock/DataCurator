@@ -8,10 +8,8 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
-public class WifiNotification {
+public class DataCuratorNotification {
     private final static String CHANNEL_ID = "com.example.nbmb.datacurator,channel_id";
-    private static NotificationCompat.Builder wifiNotificationBuilder;
-    private static NotificationCompat.Builder dataNotificationBuilder;
 
     public static void createNotificationChannel(Context context) {
         // Create the NotificationChannel, but only on API 26+ because
@@ -29,24 +27,24 @@ public class WifiNotification {
         }
     }
 
-    public static void createNotification(Context context) {
-        wifiNotificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
+    public static NotificationCompat.Builder createNotificationBuilder(Context context, String title, String text) {
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_test_notification)
-                .setContentTitle("Test")
-                .setContentText("This is a test notification")
+                .setContentTitle(title)
+                .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        return notificationBuilder;
     }
 
-    public static void showNotification(Context context, String notificationText) {
-        int notificationId = 300;
-        wifiNotificationBuilder.setContentText(notificationText);
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+    public static void showNotification(NotificationManagerCompat notificationManager, String notificationText, int notificationId,
+                                        NotificationCompat.Builder notificationBuilder) {
+        notificationBuilder.setContentText(notificationText);
 
         // notificationId is a unique int for each notification that you must define
-        notificationManager.notify(notificationId, wifiNotificationBuilder.build());
+        notificationManager.notify(notificationId, notificationBuilder.build());
     }
 
-    public static void setTapAction(PendingIntent intent) {
-        wifiNotificationBuilder.setContentIntent(intent);
+    public static void setTapAction(PendingIntent intent, NotificationCompat.Builder notificationBuilder) {
+        notificationBuilder.setContentIntent(intent);
     }
 }

@@ -3,7 +3,11 @@ package com.example.nbmb.datacurator;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+
+import com.example.nbmb.datacurator.data_alerts.DataUsage;
+import com.example.nbmb.datacurator.database.DisableDataHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,6 +20,11 @@ public class MainActivity extends AppCompatActivity {
     public void disableView(View view)
     {
         Intent intent = new Intent(this, WifiDisable.class);
+        startActivity(intent);
+    }
+
+    public void dataUsageClicked(View view) {
+        Intent intent = new Intent(this, DataAlertActivity.class);
         startActivity(intent);
     }
 }
