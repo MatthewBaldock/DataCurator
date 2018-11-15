@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Data Curator</string>
+    <string-array name="time_units_array">
+        <item>Seconds</item>
+        <item>Minutes</item>
+        <item>Hours</item>
+        <item>Days</item>
+    </string-array>
+    <string-array name="datarate_units_array">
+        <item>KB</item>
+        <item>MB</item>
+        <item>GB</item>
+    </string-array>
 </resources>
