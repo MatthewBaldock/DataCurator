@@ -34,6 +34,22 @@ public class DisableDataHelper extends SQLiteOpenHelper {
                     COLUMN_DATAUSAGE_QUERY + " INTEGER "+ ")";
     private static final String DATAUSAGE_TABLE_DROP = "DROP TABLE IF EXISTS "+ TABLE_DATAUSAGE;
 
+    public static final String TABLE_NETWORKS = "savednetworks";
+    public static final String COLUMN_NETID = "netID";
+    public static final String COLUMN_NETNAME = "netName";
+    public static final String COLUMN_NETPASS = "netPass";
+    public static final String COLUMN_NETSECURE = "netSecure";
+   // public static final String TABLE_NETWORKS = "networks";
+
+    private static final String NETWORKS_TABLE_CREATE =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_NETWORKS + " (" +
+                            COLUMN_NETID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                            COLUMN_NETNAME + " TEXT , " +
+                            COLUMN_NETPASS + " TEXT , " +
+                            COLUMN_NETSECURE + " TEXT )";
+
+    private static final String NETWORKS_TABLE_DROP = "DROP TABLE IF EXISTS "+ TABLE_NETWORKS;
+
     public DisableDataHelper(Context context)
     {
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
@@ -46,11 +62,15 @@ public class DisableDataHelper extends SQLiteOpenHelper {
         db.execSQL(DATAUSAGE_TABLE_CREATE);
         row = "INSERT INTO "+TABLE_DATAUSAGE +"(dataID,dataUsageSinceBoot,dataUsageSinceQuery)VALUES(33,0,0)";
         db.execSQL(row);
+        db.execSQL(NETWORKS_TABLE_CREATE);
+        row = "INSERT INTO "+TABLE_NETWORKS +"(netID,netName,netPass,netSecure)VALUES(1,'PenaltyBox','','WAP2')";
+        db.execSQL(row);
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
         db.execSQL(DISABLE_TABLE_DROP);
         db.execSQL(DATAUSAGE_TABLE_DROP);
+        db.execSQL(NETWORKS_TABLE_CREATE);
         onCreate(db);
     }
     public void toggleOn(String duration,String startTime){
@@ -139,5 +159,22 @@ public class DisableDataHelper extends SQLiteOpenHelper {
             dataUsageSinceQuery = cursor.getLong(0);
         }
         return dataUsageSinceQuery;
+    }
+
+    public String[] getNetworkList()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        int index = 0;
+        String getRow = "SELECT * FROM "+TABLE_NETWORKS;
+        Cursor cursor = db.rawQuery(getRow,null);
+        String[] images = new String[cursor.getCount()];
+        while(cursor.moveToNext())
+        {
+            images[index] = cursor.getString(1);
+            index++;
+        }
+
+        return images;
     }
 }

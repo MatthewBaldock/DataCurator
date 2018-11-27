@@ -27,4 +27,14 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, DataAlertActivity.class);
         startActivity(intent);
     }
+    public void savedNetworks(View view)
+    {
+        Intent intent = new Intent(this, SavedNetworks.class);
+        startActivity(intent);
+    }
+    public void detectedNetworks(View view)
+    {
+        Intent intent = new Intent(this, DetectedNetworks.class);
+        startActivity(intent);
+    }
 }
