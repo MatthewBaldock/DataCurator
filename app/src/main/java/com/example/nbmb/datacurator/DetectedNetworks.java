@@ -10,10 +10,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.app.AlertDialog.Builder;
-import android.support.v4.content.ContextCompat;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.nbmb.datacurator.database.DisableDataHelper;
+import com.example.nbmb.datacurator.helpers.PermissionsHelper;
 import com.example.nbmb.datacurator.service.ConnectHelper;
 import com.example.nbmb.datacurator.service.WifiListAdapter;
 
@@ -54,9 +52,9 @@ public class DetectedNetworks extends AppCompatActivity {
     protected void onStart()
     {
         super.onStart();
-        checkPermissions(Manifest.permission.CHANGE_WIFI_STATE);
-        checkPermissions(Manifest.permission.ACCESS_WIFI_STATE);
-        checkPermissions(Manifest.permission.ACCESS_COARSE_LOCATION);
+        PermissionsHelper.checkPermissions(Manifest.permission.CHANGE_WIFI_STATE, this);
+        PermissionsHelper.checkPermissions(Manifest.permission.ACCESS_WIFI_STATE, this);
+        PermissionsHelper.checkPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, this);
         scanWifi();
 
     }
@@ -99,24 +97,7 @@ public class DetectedNetworks extends AppCompatActivity {
             scanFailure();
         }
     }
-public void checkPermissions(String permission)
-{
-    if (ContextCompat.checkSelfPermission(this,
-            permission)
-            != PackageManager.PERMISSION_GRANTED) {
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                permission)) {
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{permission},
-                    100);
-
-        }
-    } else {
-        Log.d("RESULTS", "ALREADY GRANTED "+permission);
-    }
-}
     public void setList(){
 
         if(list.length>0) {

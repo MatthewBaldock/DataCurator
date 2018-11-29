@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.nbmb.datacurator.data_alerts.DataAlertTask;
 import com.example.nbmb.datacurator.data_alerts.DataUsage;
+import com.example.nbmb.datacurator.helpers.UnitHelper;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -60,8 +61,8 @@ public class DataAlertActivity extends AppCompatActivity {
         String dataUnitText = dataUnitSpinner.getSelectedItem().toString();
         boolean enabled = enableSwitch.isChecked();
 
-        TimeUnit timeUnit = getTimeUnitFromString(timeUnitText);
-        long dataUnit = getDataUnitFromString(dataUnitText);
+        TimeUnit timeUnit = UnitHelper.getTimeUnitFromString(timeUnitText);
+        long dataUnit = UnitHelper.getDataUnitFromString(dataUnitText);
 
         Log.d("alertInitialized", "Alert: " + dataLimit + dataUnitText + " per "
                 + timeLimit + " " + timeUnitText + " isEnabled:" + enabled);
@@ -85,41 +86,12 @@ public class DataAlertActivity extends AppCompatActivity {
                 notificationBuilder);
 
         DataAlertTask task = new DataAlertTask(dataLimit, timeLimit,
-                getDataUnitFromString(dataUnitText), getTimeUnitFromString(timeUnitText),
+                UnitHelper.getDataUnitFromString(dataUnitText), UnitHelper.getTimeUnitFromString(timeUnitText),
                 dataUnitText, timeUnitText, new DataUsage(this.getApplicationContext()),
                 notificationBuilder, NotificationManagerCompat.from(this.getApplicationContext()));
 
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-        executor.scheduleAtFixedRate(task, timeLimit, timeLimit, getTimeUnitFromString(timeUnitText));
+        executor.scheduleAtFixedRate(task, timeLimit, timeLimit, UnitHelper.getTimeUnitFromString(timeUnitText));
     }
 
-    public TimeUnit getTimeUnitFromString(String selection) {
-        switch(selection) {
-            case "Seconds":
-                return TimeUnit.SECONDS;
-            case "Minutes":
-                return TimeUnit.MINUTES;
-            case "Hours":
-                return TimeUnit.HOURS;
-            case "Days":
-                return TimeUnit.DAYS;
-            default:
-                return TimeUnit.MINUTES;
-        }
-    }
-
-    public long getDataUnitFromString(String selection) {
-        switch(selection) {
-            case "B":
-                return 1;
-            case "KB":
-                return 1000;
-            case "MB":
-                return 1000000;
-            case "GB":
-                return 1000000000;
-            default:
-                return 1000000;
-        }
-    }
 }

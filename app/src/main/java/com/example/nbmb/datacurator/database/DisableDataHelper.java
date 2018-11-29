@@ -51,6 +51,22 @@ public class DisableDataHelper extends SQLiteOpenHelper {
 
     private static final String NETWORKS_TABLE_DROP = "DROP TABLE IF EXISTS "+ TABLE_NETWORKS;
 
+    public static final String TABLE_ALERTS = "dataalerts";
+    public static final String ALERT_ID_COLUMN = "alertID";
+    public static final String COLUMN_DATA_LIMIT = "dataLimit";
+    public static final String COLUMN_TIME_PERIOD = "timePeriod";
+    public static final String COLUMN_DATA_UNIT = "dataUnit";
+    public static final String COLUMN_TIME_UNIT = "timeUnit";
+
+    private static final String ALERT_TABLE_CREATE =
+            "CREATE TABLE " + TABLE_ALERTS + " (" +
+                    ALERT_ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                    COLUMN_DATA_LIMIT + " INTEGER, "+
+                    COLUMN_TIME_PERIOD + " INTEGER, "+
+                    COLUMN_DATA_UNIT + " TEXT, "+
+                    COLUMN_TIME_UNIT + " TEXT "+")";
+    private static final String ALERT_TABLE_DROP = "DROP TABLE IF EXISTS "+ TABLE_ALERTS;
+
     public DisableDataHelper(Context context)
     {
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
@@ -66,6 +82,9 @@ public class DisableDataHelper extends SQLiteOpenHelper {
         db.execSQL(NETWORKS_TABLE_CREATE);
         //row = "INSERT INTO "+TABLE_NETWORKS +"(netID,netName,netPass,netSecure)VALUES(1,'TEST','','WAP2')";
        // db.execSQL(row);
+        db.execSQL(ALERT_TABLE_CREATE);
+        //row = "INSERT INTO "+TABLE_ALERTS +"(dataID,dataUsageSinceBoot,dataUsageSinceQuery)VALUES(33,0,0)";
+        //db.execSQL(row);
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
@@ -222,5 +241,12 @@ public class DisableDataHelper extends SQLiteOpenHelper {
         }
         db.execSQL(query);
 
+    }
+
+    public void addAlert(long dataLimit, long timePeriod, String dataUnit, String timeUnit) {
+        String query = "INSERT INTO "+ TABLE_ALERTS +"("+COLUMN_DATA_LIMIT+","+COLUMN_TIME_PERIOD+","+COLUMN_DATA_UNIT+","+COLUMN_TIME_UNIT+")"+
+                "VALUES('"+dataLimit+"','"+timePeriod+"','"+dataUnit+"','"+timeUnit+"')";
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(query);
     }
 }

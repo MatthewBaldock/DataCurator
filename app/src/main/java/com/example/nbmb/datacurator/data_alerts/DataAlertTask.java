@@ -2,6 +2,7 @@ package com.example.nbmb.datacurator.data_alerts;
 
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.util.Log;
 
 import com.example.nbmb.datacurator.DataCuratorNotification;
 
@@ -34,6 +35,7 @@ public class DataAlertTask implements Runnable{
 
     @Override
     public void run() {
+        Log.d("dataalert", "task run");
         long dataUsage = du.getDataUsage() / dataUnit;
         if(dataUsage >= dataLimit) {
             String text = "Data usage: " + dataUsage + dataUnitText + " in the last " + timePeriod +

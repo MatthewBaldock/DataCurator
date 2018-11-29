@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.nbmb.datacurator">
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +26,7 @@
         <activity android:name=".DataAlertActivity" />
         <activity android:name=".WifiDisable" />
 
-        <service
+        <!--<service
             android:name=".service.WifiDisableService"
             android:enabled="true"
             android:exported="true"
@@ -38,7 +41,22 @@
             android:name=".TabbedNetworks2"
             android:label="@string/title_activity_tabbed_networks2"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".DetectedNetworks"></activity>
+        <activity android:name=".DetectedNetworks"></activity>-->
+
+        <service android:name=".DataCuratorService"
+            android:label="Data Curator Notifications"
+            android:directBootAware="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:process=".DataAlertBackground">
+        </service>
+
+        <receiver
+            android:name=".StartupReceiver"
+            android:label="DataCurator">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
