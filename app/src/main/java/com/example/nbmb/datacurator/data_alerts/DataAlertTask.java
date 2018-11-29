@@ -39,6 +39,8 @@ public class DataAlertTask implements Runnable{
             String text = "Data usage: " + dataUsage + dataUnitText + " in the last " + timePeriod +
                     " " + timeUnitText;
             DataCuratorNotification.showNotification(notificationManager, text, NOTIFICATION_ID, notificationBuilder);
+        } else {
+            DataCuratorNotification.hideNotification(notificationManager, NOTIFICATION_ID);
         }
     }
 }

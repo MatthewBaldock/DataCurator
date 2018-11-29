@@ -1,5 +1,6 @@
 package com.example.nbmb.datacurator;
 
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.provider.Settings;
@@ -21,12 +22,15 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class DataAlertActivity extends AppCompatActivity {
+    private final static String CHANNEL_ID = "com.example.nbmb.datacurator,data_alert_channel";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_alert);
-        DataCuratorNotification.createNotificationChannel(this.getApplicationContext());
+        DataCuratorNotification.createNotificationChannel(this.getApplicationContext(), CHANNEL_ID,
+                "Data Alerts", "For alerting user that their specified data limit has been reached.",
+                NotificationManager.IMPORTANCE_DEFAULT);
 
     }
 
@@ -63,8 +67,10 @@ public class DataAlertActivity extends AppCompatActivity {
                 + timeLimit + " " + timeUnitText + " isEnabled:" + enabled);
         Log.d("alertInitialized", "Alert: " + dataUnit  + " " + timeUnit.toString());
 
-        if(enabled)
+        if(enabled) {
             setAlert(dataLimit, dataUnitText, timeLimit, timeUnitText);
+            Toast.makeText(this, "Alert initialized.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setAlert(long dataLimit, String dataUnitText, long timeLimit, String timeUnitText) {
