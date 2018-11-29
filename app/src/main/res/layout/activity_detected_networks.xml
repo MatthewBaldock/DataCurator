@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetectedNetworks">
+
     <ListView
         android:id="@+id/networkList"
         android:layout_width="wrap_content"
@@ -12,5 +13,5 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:choiceMode="singleChoice" />
+        android:choiceMode="singleChoice"/>
 </RelativeLayout>

@@ -5,24 +5,31 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.nbmb.datacurator.database.DisableDataHelper;
+import com.example.nbmb.datacurator.service.ConnectHelper;
 import com.example.nbmb.datacurator.service.WifiListAdapter;
 
 public class SavedNetworks extends AppCompatActivity {
     static DisableDataHelper helper;
     WifiListAdapter adapter;
     static Context context;
+    int listIndex;
+    String[] savedList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_networks);
         helper = new DisableDataHelper(this);
         context = this.getApplicationContext();
-        adapter = new WifiListAdapter(SavedNetworks.this,helper.getNetworkList());
+        savedList = helper.getNetworkList();
+        adapter = new WifiListAdapter(SavedNetworks.this,savedList);
         setList();
     }
 
@@ -32,21 +39,42 @@ public class SavedNetworks extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-             /**   AlertDialog.Builder builder;// = new AlertDialog.Builder//);getActivity());
+                listIndex = i;
+                Log.d("RESULTS","Index:"+i);
+                AlertDialog.Builder builder = new AlertDialog.Builder(SavedNetworks.this);
+                TextView text = new TextView(SavedNetworks.this);
 
-                builder.setPositiveButton("Connect", new DialogInterface.OnClickListener() {
+                text.setTextSize(20);
+                text.setText("Connect to or Save "+savedList[listIndex].toString()+" Network");
+                builder.setView(text);
+                builder.setNeutralButton("Connect",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // User clicked OK button
+                        String[] network = helper.getNetworkItem(savedList[listIndex]);
+                        ConnectHelper.connectWifi(context,network[0],network[1],network[2]);
+
                     }
                 });
-                builder.setNegativeButton("Remove", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener()
+                {
                     public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
+                        helper.removeNetworkItem(savedList[listIndex].toString());
+                        ConnectHelper.removeWifi(context,savedList[listIndex].toString());
                     }
                 });
-                AlertDialog dialog = builder.create();**/
+                builder.setNegativeButton("Disassociate", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        ConnectHelper.removeWifi(context,savedList[listIndex].toString());
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+
 
             }
         });
+
     }
 }

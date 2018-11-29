@@ -1,8 +1,10 @@
 package com.example.nbmb.datacurator;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -10,37 +12,43 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.app.AlertDialog.Builder;
 import android.support.v4.content.ContextCompat;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.nbmb.datacurator.database.DisableDataHelper;
+import com.example.nbmb.datacurator.service.ConnectHelper;
 import com.example.nbmb.datacurator.service.WifiListAdapter;
 
 import java.util.List;
 
 public class DetectedNetworks extends AppCompatActivity {
-    static WifiManager manager;
     WifiListAdapter adapter;
     static Context context;
+    DisableDataHelper helper;
     List<ScanResult> results;
     int wifiCount;
+    int wifiIndex;
     WifiManager wifiManager;
+    String[] list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detected_networks);
         context = getApplicationContext();
-       // manager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
-        wifiManager  = (WifiManager)
-                context.getSystemService(Context.WIFI_SERVICE);
+        helper = new DisableDataHelper(context);
+        wifiManager  = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         wifiCount = 0;
-
+        wifiIndex = 0;
     }
     @Override
     protected void onStart()
@@ -49,14 +57,14 @@ public class DetectedNetworks extends AppCompatActivity {
         checkPermissions(Manifest.permission.CHANGE_WIFI_STATE);
         checkPermissions(Manifest.permission.ACCESS_WIFI_STATE);
         checkPermissions(Manifest.permission.ACCESS_COARSE_LOCATION);
-        setList();
+        scanWifi();
+
     }
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 100: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d("RESULTS","GRANTED");
@@ -65,40 +73,10 @@ public class DetectedNetworks extends AppCompatActivity {
                 }
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
         }
     }
-public void checkPermissions(String permission)
-{
-    if (ContextCompat.checkSelfPermission(this,
-            permission)
-            != PackageManager.PERMISSION_GRANTED) {
-
-        // Permission is not granted
-        // Should we show an explanation?
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                permission)) {
-            // Show an explanation to the user *asynchronously* -- don't block
-            // this thread waiting for the user's response! After the user
-            // sees the explanation, try again to request the permission.
-        } else {
-            // No explanation needed; request the permission
-            ActivityCompat.requestPermissions(this,
-                    new String[]{permission},
-                    100);
-
-            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-            // app-defined int constant. The callback method gets the
-            // result of the request.
-        }
-    } else {
-        Log.d("RESULTS", "ALREADY GRANTED "+permission);
-    }
-}
-    public void setList(){
-
+    void scanWifi()
+    {
         BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context c, Intent intent) {
@@ -107,7 +85,6 @@ public void checkPermissions(String permission)
                 if (success) {
                     scanSuccess();
                 } else {
-                    // scan failure handling
                     scanFailure();
                 }
             }
@@ -119,85 +96,142 @@ public void checkPermissions(String permission)
 
         boolean success = wifiManager.startScan();
         if (!success) {
-            // scan failure handling
             scanFailure();
         }
+    }
+public void checkPermissions(String permission)
+{
+    if (ContextCompat.checkSelfPermission(this,
+            permission)
+            != PackageManager.PERMISSION_GRANTED) {
 
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                permission)) {
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{permission},
+                    100);
 
-
-      /*  int isLocation =0;
-        try{
-           isLocation =  Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
         }
-        catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
-        Log.d("RESULTS","Is location on: "+isLocation + " OFf Int"+Settings.Secure.LOCATION_MODE_OFF );
-        if(isLocation == Settings.Secure.LOCATION_MODE_OFF)
-        {
-            Intent intent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(intent);
-        }
+    } else {
+        Log.d("RESULTS", "ALREADY GRANTED "+permission);
+    }
+}
+    public void setList(){
 
-       registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                manager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                results = manager.getScanResults();
-                wifiCount=results.size();
+        if(list.length>0) {
+            adapter = new WifiListAdapter(context,list );
+            ListView listView = (ListView) findViewById(R.id.networkList);
 
-                Log.d("RESULTS", results.toString());
-                Log.d("RESULTS", "Size: "+results.size());
-            }
-        },new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-        manager.startScan();
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    wifiIndex = i;
+                    Builder builder = new Builder(DetectedNetworks.this);
+                    Builder passBuild = new Builder(DetectedNetworks.this);
+                    TextView text = new TextView(DetectedNetworks.this);
+                    EditText password = new EditText(DetectedNetworks.this);
 
-            try {
-                wifiCount = wifiCount - 1;
-                    Log.d("RESULTS", results.toString());
-                while (wifiCount >= 0) {
-                    Log.d("RESULTS", results.get(wifiCount).SSID);
-                    wifiCount=wifiCount -1;
+                    text.setTextSize(20);
+                    text.setText("Connect to or Save "+list[wifiIndex].toString()+" Network");
+                    builder.setView(text);
+                    passBuild.setTitle("Password");
+                    passBuild.setView(password);
+                    builder.setNeutralButton("Connect",new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Builder passBuild = new Builder(DetectedNetworks.this);
+
+                            final EditText password = new EditText(DetectedNetworks.this);
+                            passBuild.setTitle("Password");
+                            passBuild.setView(password);
+                            passBuild.setNegativeButton("Cancel",new DialogInterface.OnClickListener()
+                            {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    dialog.cancel();
+
+                                }
+                            });
+                            passBuild.setPositiveButton("Ok",new DialogInterface.OnClickListener()
+                            {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    ConnectHelper.connectWifi(context,list[wifiIndex].toString(),password.getText().toString(),results.get(wifiIndex).capabilities.toString());
+
+                                }
+                            });
+                            AlertDialog passDialog = passBuild.create();
+                            passDialog.show();
+                        }
+                    });
+                     builder.setPositiveButton("Save", new DialogInterface.OnClickListener()
+                     {
+                         public void onClick(DialogInterface dialog, int id)
+                         {
+                             Builder passBuild = new Builder(DetectedNetworks.this);
+
+                             final EditText password = new EditText(DetectedNetworks.this);
+                             passBuild.setTitle("Password");
+                             passBuild.setView(password);
+                             passBuild.setNegativeButton("Cancel",new DialogInterface.OnClickListener()
+                             {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    dialog.cancel();
+
+                                }
+                             });
+                              passBuild.setPositiveButton("Ok",new DialogInterface.OnClickListener()
+                              {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    helper.addNetwork(list[wifiIndex].toString(),password.getText().toString(),results.get(wifiIndex).capabilities.toString());
+
+                                }
+                              });
+                             AlertDialog passDialog = passBuild.create();
+                             passDialog.show();
+                         }
+                     });
+                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                     {
+                        public void onClick(DialogInterface dialog, int id)
+                        {
+                            dialog.cancel();
+                        }
+                     });
+
+                    AlertDialog passDialog = passBuild.create();
+                     AlertDialog dialog = builder.create();
+                     dialog.show();
+
+
+
                 }
-            }
-            catch (Exception e){
-                Log.d("Wifi", e.getMessage());
-            }
-
-
-        ListView list = (ListView) findViewById(R.id.networkList);
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                /**   AlertDialog.Builder builder;// = new AlertDialog.Builder//);getActivity());
-
-                 builder.setPositiveButton("Connect", new DialogInterface.OnClickListener() {
-                 public void onClick(DialogInterface dialog, int id) {
-                 // User clicked OK button
-                 }
-                 });
-                 builder.setNegativeButton("Remove", new DialogInterface.OnClickListener() {
-                 public void onClick(DialogInterface dialog, int id) {
-                 // User cancelled the dialog
-                 }
-                 });
-                 AlertDialog dialog = builder.create();
-
-            }
-        });**/
+            });
+        }
     }
     private void scanSuccess() {
-        List<ScanResult> results = wifiManager.getScanResults();
-        Log.d("RESULTS","ANDROID: "+results.size());
+       results = wifiManager.getScanResults();
+        wifiCount = results.size();
+        list = new String[wifiCount];
+        Log.d("RESULTS", "Results "+results.toString());
+        for(int index = 0; index<wifiCount;index++)
+        {
+            list[index] = results.get(index).SSID.toString();
+        }
+        setList();
     }
 
     private void scanFailure() {
-        // handle failure: new scan did NOT succeed
-        // consider using old scan results: these are the OLD results!
-        List<ScanResult> results = wifiManager.getScanResults();
-
-        Log.d("RESULTS","ANDROID: "+results.size());
-        //Log.d("RESULTS","ANDROID: "+results[0].SSID);
+        results = wifiManager.getScanResults();
+        wifiCount = results.size();
+        list = new String[wifiCount];
+        for(int index = 0; index<wifiCount;index++)
+        {
+            list[index] = results.get(index).SSID.toString();
+        }
+        setList();
     }
 }
