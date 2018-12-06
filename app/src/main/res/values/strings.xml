@@ -1,3 +1,34 @@
 <resources>
     <string name="app_name">Data Curator</string>
+    <string-array name="time_units_array">
+        <item>Seconds</item>
+        <item>Minutes</item>
+        <item>Hours</item>
+        <item>Days</item>
+    </string-array>
+    <string-array name="datarate_units_array">
+        <item>KB</item>
+        <item>MB</item>
+        <item>GB</item>
+    </string-array>
+    <string-array name="durationType">
+        <item>Seconds</item>
+        <item>Minutes</item>
+        <item>Hours</item>
+        <item>Days</item>
+    </string-array>
+    <string name="numTimeEditTextHint"># of</string>
+    <string name="enableAlertSwitchText">On/Off</string>
+    <string name="switchDisabledText">Disabled</string>
+    <string name="switchEnabledText">Enabled</string>
+    <string name="numBytesEditTextHint"># of</string>
+    <string name="alertTextViewText">per</string>
+    <string name="initializeButtonText">Initialize</string>
+    <string name="savedNetworksButtonText">Saved Networks</string>
+    <string name="detectedNetworksButtonText">Detected Networks</string>
+    <string name="wifiManagementButtonText">WiFi Management</string>
+    <string name="dataAlertsButtonText">Data Alerts</string>
+    <string name="disableDurationHint">Disable for how long?</string>
+    <string name="disableButtonText">DISABLE</string>
+    <string name="connectToDetectedNetworksButtonText">Connect to or Save  %1$s Network</string>
 </resources>

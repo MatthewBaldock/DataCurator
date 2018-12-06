@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DataAlertActivity">
+
+    <EditText
+        android:id="@+id/numTimeEditText"
+        android:layout_width="114dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/numTimeEditTextHint"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/numBytesEditText"
+        android:autofillHints="number" />
+
+    <Switch
+        android:id="@+id/enableAlertSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/enableAlertSwitchText"
+        android:textOff="@string/switchDisabledText"
+        android:textOn="@string/switchEnabledText"
+        app:layout_constraintStart_toEndOf="@+id/timeUnitSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/numBytesEditText"
+        android:layout_width="114dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="18dp"
+        android:ems="10"
+        android:hint="@string/numBytesEditTextHint"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="number" />
+
+    <Spinner
+        android:id="@+id/dataSizeSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="18dp"
+        android:entries="@array/datarate_units_array"
+        app:layout_constraintStart_toEndOf="@+id/numBytesEditText"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/timeUnitSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:entries="@array/time_units_array"
+        app:layout_constraintStart_toEndOf="@+id/numTimeEditText"
+        app:layout_constraintTop_toBottomOf="@+id/dataSizeSpinner" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="37dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="44dp"
+        android:text="@string/alertTextViewText"
+        app:layout_constraintStart_toEndOf="@+id/dataSizeSpinner"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/initalizeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginBottom="32dp"
+        android:onClick="initializeClicked"
+        android:text="@string/initializeButtonText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
