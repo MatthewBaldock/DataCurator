@@ -13,10 +13,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="# of "
+        android:hint="@string/numTimeEditTextHint"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/numBytesEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/numBytesEditText"
+        android:autofillHints="number" />
 
     <Switch
         android:id="@+id/enableAlertSwitch"
@@ -24,9 +25,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        android:text="On/Off"
-        android:textOff="Disabled"
-        android:textOn="Enabled"
+        android:text="@string/enableAlertSwitchText"
+        android:textOff="@string/switchDisabledText"
+        android:textOn="@string/switchEnabledText"
         app:layout_constraintStart_toEndOf="@+id/timeUnitSpinner"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -37,10 +38,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="18dp"
         android:ems="10"
-        android:hint="# of "
+        android:hint="@string/numBytesEditTextHint"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="number" />
 
     <Spinner
         android:id="@+id/dataSizeSpinner"
@@ -68,7 +70,7 @@
         android:layout_height="31dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="44dp"
-        android:text="per"
+        android:text="@string/alertTextViewText"
         app:layout_constraintStart_toEndOf="@+id/dataSizeSpinner"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -79,7 +81,7 @@
         android:layout_marginStart="28dp"
         android:layout_marginBottom="32dp"
         android:onClick="initializeClicked"
-        android:text="Initialize"
+        android:text="@string/initializeButtonText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

@@ -13,7 +13,7 @@
     android:layout_marginStart="8dp"
     android:layout_marginTop="20dp"
     android:onClick="savedNetworks"
-    android:text="Saved Networks"
+    android:text="@string/savedNetworksButtonText"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/button2" />
     <Button
@@ -23,7 +23,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:onClick="detectedNetworks"
-        android:text="Detected Networks"
+        android:text="@string/detectedNetworksButtonText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button3" />
 
@@ -35,7 +35,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:onClick="disableView"
-        android:text="WiFi Management"
+        android:text="@string/wifiManagementButtonText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,7 +46,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:onClick="dataUsageClicked"
-        android:text="Data Alerts"
+        android:text="@string/dataAlertsButtonText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button" />
 

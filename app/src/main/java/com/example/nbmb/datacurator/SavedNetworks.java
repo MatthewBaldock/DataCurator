@@ -19,7 +19,7 @@ import com.example.nbmb.datacurator.service.WifiListAdapter;
 public class SavedNetworks extends AppCompatActivity {
     static DisableDataHelper helper;
     WifiListAdapter adapter;
-    static Context context;
+    Context context;
     int listIndex;
     String[] savedList;
     @Override
@@ -45,7 +45,7 @@ public class SavedNetworks extends AppCompatActivity {
                 TextView text = new TextView(SavedNetworks.this);
 
                 text.setTextSize(20);
-                text.setText("Connect to or Save "+savedList[listIndex].toString()+" Network");
+                text.setText(getResources().getString(R.string.connectToDetectedNetworksButtonText, savedList[listIndex]));
                 builder.setView(text);
                 builder.setNeutralButton("Connect",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
