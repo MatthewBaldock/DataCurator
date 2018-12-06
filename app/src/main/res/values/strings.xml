@@ -17,11 +17,18 @@
         <item>Hours</item>
         <item>Days</item>
     </string-array>
-    <string name="title_activity_tabbed_networks">TabbedNetworks</string>
-    <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="title_activity_tabbed_networks2">TabbedNetworks2</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
+    <string name="numTimeEditTextHint"># of</string>
+    <string name="enableAlertSwitchText">On/Off</string>
+    <string name="switchDisabledText">Disabled</string>
+    <string name="switchEnabledText">Enabled</string>
+    <string name="numBytesEditTextHint"># of</string>
+    <string name="alertTextViewText">per</string>
+    <string name="initializeButtonText">Initialize</string>
+    <string name="savedNetworksButtonText">Saved Networks</string>
+    <string name="detectedNetworksButtonText">Detected Networks</string>
+    <string name="wifiManagementButtonText">WiFi Management</string>
+    <string name="dataAlertsButtonText">Data Alerts</string>
+    <string name="disableDurationHint">Disable for how long?</string>
+    <string name="disableButtonText">DISABLE</string>
+    <string name="connectToDetectedNetworksButtonText">Connect to or Save  %1$s Network</string>
 </resources>

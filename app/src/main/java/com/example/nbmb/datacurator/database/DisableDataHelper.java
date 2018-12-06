@@ -107,6 +107,7 @@ public class DisableDataHelper extends SQLiteOpenHelper {
         {
             duration = cursor.getInt(0);
         }
+        cursor.close();
         return duration;
     }
     public String getStatus()
@@ -119,6 +120,7 @@ public class DisableDataHelper extends SQLiteOpenHelper {
         {
             onoff = cursor.getString(0);
         }
+        cursor.close();
         return onoff;
     }
 
@@ -146,6 +148,7 @@ public class DisableDataHelper extends SQLiteOpenHelper {
         {
             dataUsageSinceBoot = cursor.getLong(0);
         }
+        cursor.close();
         return dataUsageSinceBoot;
     }
 
@@ -159,6 +162,7 @@ public class DisableDataHelper extends SQLiteOpenHelper {
         {
             dataUsageSinceQuery = cursor.getLong(0);
         }
+        cursor.close();
         return dataUsageSinceQuery;
     }
     public String[] getNetworkItem(String name)
@@ -176,8 +180,7 @@ public class DisableDataHelper extends SQLiteOpenHelper {
             images[1] = cursor.getString(2);
             images[2] = cursor.getString(3);
         }
-
-
+        cursor.close();
         return images;
     }
     public void removeNetworkItem(String name)
@@ -201,7 +204,7 @@ public class DisableDataHelper extends SQLiteOpenHelper {
             images[index] = cursor.getString(1);
             index++;
         }
-
+        cursor.close();
         return images;
     }
     public void addNetwork(String name, String password,String security)
@@ -221,6 +224,6 @@ public class DisableDataHelper extends SQLiteOpenHelper {
                     "VALUES('"+name+"','"+password+"','"+security+"')";
         }
         db.execSQL(query);
-
+        cursor.close();
     }
 }

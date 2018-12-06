@@ -31,7 +31,7 @@ import com.example.nbmb.datacurator.service.WifiListAdapter;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    static Context context;
+    Context context;
     DisableDataHelper helper;
     List<ScanResult> results;
     int wifiCount;
