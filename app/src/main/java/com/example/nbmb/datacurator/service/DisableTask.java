@@ -9,7 +9,7 @@ import android.util.Log;
 import com.example.nbmb.datacurator.WifiDisable;
 import com.example.nbmb.datacurator.database.DisableDataHelper;
 
-public class DisableTask implements Runnable {;
+public class DisableTask implements Runnable {
     WifiManager wifi ;
     DisableDataHelper ddhlp;
     public DisableTask(Context context){
