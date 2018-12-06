@@ -49,5 +49,12 @@ public class DisableWifiTest {
         assert(wifi.isWifiEnabled() == false);
         Thread.sleep(6000);
         assert(wifi.isWifiEnabled() == true);
+        pressBack();
+        onView(withId(R.id.button)).perform(click());
+        onView(withId(R.id.duration)).perform(replaceText("10"),closeSoftKeyboard());
+        onView(withId(R.id.toggleButton)).perform(click());
+        assert(wifi.isWifiEnabled() == false);
+        onView(withId(R.id.toggleButton)).perform(click());
+        assert(wifi.isWifiEnabled() == true);
     }
 }
