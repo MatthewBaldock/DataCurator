@@ -27,13 +27,18 @@ import static org.junit.Assert.assertEquals;
 public class DetectWifiTest {
     @Rule
     public  ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class);
+    @Rule
+    public  ActivityTestRule<DetectedNetworks> detectedNetworksActivityTestRule = new ActivityTestRule<DetectedNetworks>(DetectedNetworks.class);
     @Before
     public void init()
     {
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction();
+        detectedNetworksActivityTestRule.getActivity().getSupportFragmentManager().beginTransaction();
     }
     @Test
     public void detect() throws Exception {
-        
+        int initial = detectedNetworksActivityTestRule.getActivity().wifiCount;
+        onView(withId(R.id.button4)).perform(click());
+        assert(initial < detectedNetworksActivityTestRule.getActivity().wifiCount);
     }
 }
