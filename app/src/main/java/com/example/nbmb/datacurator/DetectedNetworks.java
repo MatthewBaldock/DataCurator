@@ -32,7 +32,7 @@ import java.util.List;
 
 public class DetectedNetworks extends AppCompatActivity {
     WifiListAdapter adapter;
-    static Context context;
+    Context context;
     DisableDataHelper helper;
     List<ScanResult> results;
     int wifiCount;
@@ -134,7 +134,7 @@ public void checkPermissions(String permission)
                     EditText password = new EditText(DetectedNetworks.this);
 
                     text.setTextSize(20);
-                    text.setText("Connect to or Save "+list[wifiIndex].toString()+" Network");
+                    text.setText(getResources().getString(R.string.connectToDetectedNetworksButtonText, list[wifiIndex]));
                     builder.setView(text);
                     passBuild.setTitle("Password");
                     passBuild.setView(password);
